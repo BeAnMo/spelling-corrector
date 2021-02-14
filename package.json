@@ -19,7 +19,7 @@
   "dependencies": {
     "blanket": "1.x.x",
     "fs": "x.x.x",
-    "mocha": "2.x.x"
+    "mocha": "^8.3.0"
   },
   "license": "MIT",
   "bugs": {
