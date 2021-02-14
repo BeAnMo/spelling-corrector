@@ -58,7 +58,6 @@ spellCorrector.prototype.correct = function (word) {
     }
 
     const suggestions = this.getEdits(word);
-    //const candidates = new HashMap();
     const candidates = Object.create(null);
     let count = 0;
 
@@ -68,7 +67,6 @@ spellCorrector.prototype.correct = function (word) {
         if (maybe) {
             candidates[maybe] = curWord;
             count += 1;
-            //candidates.set(this.nWords[curWord], curWord);
         }
     }
 
@@ -86,7 +84,6 @@ spellCorrector.prototype.correct = function (word) {
             if (maybe) {
                 candidates[maybe] = newWord;
                 count += 1;
-                //candidates.set(this.nWords[newWord], newWord);
             }
         }
     }
