@@ -23,7 +23,7 @@ suite("Spell Corrector", function () {
         assert.equal(nWords["the"], 80030);
     });
 
-    // This includes duplicates.
+    // The original version of getEdits included duplicates.
     test("getEdits function should generate all possible correction strings from a passed word", function () {
         let expectedNumberOfCombination = function (n) {
             return 54 * n + 25;
@@ -69,5 +69,17 @@ suite("Spell Corrector", function () {
                 assert.equal(correctedWord, expected);
             }
         }
+    });
+
+    test("should return no edits if the word length is greater than the wordLengthLimit", function () {
+        spellCorrector.wordLengthLimit = 10;
+
+        let edits0 = spellCorrector.getEdits('mushrooming');
+
+        assert.equal(edits0.size, 0, 'Should not have edits');
+
+        let edits1 = spellCorrector.getEdits('mushroom');
+
+        assert.equal(edits1.size > 0, true, 'Should have edits');
     });
 });

@@ -1,8 +1,9 @@
 const fs = require('fs');
 
-const spellCorrector = function () {
+const spellCorrector = function (opts = {}) {
     this.nWords = Object.create(null);
     this.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+    this.wordLengthLimit = opts.wordLengthLimit || 0;
 };
 
 spellCorrector.prototype.loadDictionary = function (dictPath) {
@@ -26,6 +27,11 @@ spellCorrector.prototype.loadDictionary = function (dictPath) {
 
 spellCorrector.prototype.getEdits = function (word) {
     const L = word.length;
+
+    if (this.wordLengthLimit && this.wordLengthLimit < L) {
+        return new Set();
+    }
+
     const AL = this.alphabet.length;
     const results = new Set();
 

@@ -11,9 +11,12 @@ npm i spelling-corrector
 # How to use 
 ```javascript
 
-var SpellCorrector = require('spelling-corrector');
+const SpellCorrector = require('spelling-corrector');
 
-var spellCorrector = new SpellCorrector();
+const spellCorrector = new SpellCorrector();
+// With options. 
+// The largest words in the  loaded dictionary are 17 letters long.
+const spellCorrector = new SpellCorrector({ wordLengthLimit: 30 });
 
 // you need to do this step only one time to load the Dictionary
 spellCorrector.loadDictionary();
