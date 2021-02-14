@@ -1,9 +1,9 @@
-var assert = require('assert');
-var SpellCorrector = require('../src/spell.js').spellCorrector;
+const assert = require('assert');
+const SpellCorrector = require('../src/spell.js').spellCorrector;
 
 suite("Spell Corrector", function () {
 
-    var spellCorrector;
+    let spellCorrector;
 
     setup(function () {
         spellCorrector = new SpellCorrector();
@@ -18,33 +18,39 @@ suite("Spell Corrector", function () {
     test("loadDictionary function should construct a hashmap from the passed dictionary", function () {
         this.timeout(40000);
         spellCorrector.loadDictionary();
-        var nWords = spellCorrector.nWords;
-  
+        let nWords = spellCorrector.nWords;
+
         assert.equal(nWords["the"], 80030);
     });
 
+    // This includes duplicates.
     test("getEdits function should generate all possible correction strings from a passed word", function () {
-        var expectedNumberOfCombination = function (n) {
+        let expectedNumberOfCombination = function (n) {
             return 54 * n + 25;
         };
-        var editWords = spellCorrector.getEdits("xy");
-        assert.equal(editWords.length, expectedNumberOfCombination(2));
+        let editWords = spellCorrector.getEdits("xy");
+        let actual = editWords.size;
+        let expected = expectedNumberOfCombination(2);
+        assert.equal(actual, expected, `Expected ${expected} and got ${actual}.`);
 
         editWords = spellCorrector.getEdits("aaa");
-        assert.equal(editWords.length, expectedNumberOfCombination(3));
+        actual = editWords.size;
+        expected = expectedNumberOfCombination(3);
+        assert.equal(actual, expected, `Expected ${expected} and got ${actual}.`);
 
     });
+
     test("getEdits function should not generate invalid correction strings from a passed word", function () {
-        var editWords = spellCorrector.getEdits("xy");
-        assert.notEqual(editWords.indexOf("xyz"), -1);
-        assert.equal(editWords.indexOf("axyz"), -1);
-        assert.equal(editWords.indexOf("xy1"), -1);
+        let editWords = spellCorrector.getEdits("xy");
+        assert.equal(editWords.has("xyz"), true, 'Does not have xyz');
+        assert.equal(editWords.has("axyz"), false, 'Has axyz');
+        assert.equal(editWords.has("xy1"), false, 'Has xy1');
     });
 
     test("correct function should return the correction for the passed word", function () {
         spellCorrector.loadDictionary();
         this.timeout(40000);
-        var set1 = {
+        let set1 = {
             'access': 'acess',
             'accommodation': 'accomodation',
             'forbidden': 'forbiden',
@@ -55,14 +61,13 @@ suite("Spell Corrector", function () {
             'address': 'addres',
             'member': 'rember'
         };
-        for (var key in set1) {
+        for (let key in set1) {
             if (set1.hasOwnProperty(key)) {
-                var expected = key;
-                var bad = set1[key];
-                var correctedWord = spellCorrector.correct(bad);
+                const expected = key;
+                const bad = set1[key];
+                const correctedWord = spellCorrector.correct(bad);
                 assert.equal(correctedWord, expected);
             }
         }
     });
-
 });

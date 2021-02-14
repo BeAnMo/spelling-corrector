@@ -27,24 +27,34 @@ spellCorrector.prototype.loadDictionary = function (dictPath) {
 spellCorrector.prototype.getEdits = function (word) {
     const L = word.length;
     const AL = this.alphabet.length;
-    const results = [];
+    const results = new Set();
 
-    for (var i = 0; i <= L; i++) {
-        const front = word.slice(0, i);
+    const add = madeWord => {
+        results.add(madeWord);
+    };
+
+    for (let i = 0; i <= L; i++) {
+        const left = word.slice(0, i);
+        const right = word.slice(i);
 
         if (i < L) {
-            results.push(front + word.slice(i + 1));
+            // delete
+            add(left + right.slice(1));
 
             if (i < L - 1) {
-                results.push(front + word.slice(i + 1, i + 2) + word.slice(i, i + 1) + word.slice(i + 2));
+                // transpose
+                add(left + right[1] + right[0] + right.slice(2));
             }
         }
 
-        for (var j = 0; j < AL; j++) {
-            results.push(front + this.alphabet[j] + word.slice(i));
+        for (let j = 0; j < AL; j++) {
+            const ch = this.alphabet[j];
+            // insert
+            add(left + ch + right);
 
             if (i < L) {
-                results.push(front + this.alphabet[j] + word.slice(i + 1));
+                // replace
+                add(left + ch + right.slice(1));
             }
         }
     }
